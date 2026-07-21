@@ -19,7 +19,7 @@ export const landing = `
         <a href="#track" style="color:#2E4A3C;padding-bottom:2px;border-bottom:1.5px solid transparent;" style-hover="color:#C1744E;border-bottom-color:#C1744E;">TRACK ORDER</a>
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
-        <button onClick="{{ goMenu }}" style="background:#C1744E;border:none;color:#FBF8F1;padding:11px 24px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-1px);">ORDER ONLINE</button>
+        <button onClick="{{ goMenu }}" class="nav-cta" style="background:#C1744E;border:none;color:#FBF8F1;padding:11px 24px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-1px);">ORDER ONLINE</button>
         <button onClick="{{ goLogin }}" style="background:transparent;border:1px solid #CBBFA6;color:#2E4A3C;padding:10px 18px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;" style-hover="border-color:#2E4A3C;">STAFF</button>
       </div>
     </div>
@@ -86,7 +86,7 @@ export const landing = `
       </div>
       <div class="menu-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:44px;max-width:1040px;margin:0 auto;">
         <sc-for list="{{ menuGroups }}" as="g">
-          <div style="background:rgba(251,248,241,.62);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:22px;padding:42px 44px;transition:box-shadow .25s,transform .25s;" style-hover="box-shadow:0 22px 50px rgba(42,51,44,.12);transform:translateY(-4px);">
+          <div class="menu-card" style="background:rgba(251,248,241,.62);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:22px;padding:42px 44px;transition:box-shadow .25s,transform .25s;" style-hover="box-shadow:0 22px 50px rgba(42,51,44,.12);transform:translateY(-4px);">
             <div style="display:flex;align-items:baseline;justify-content:space-between;">
               <div style="font-family:'Marcellus',serif;font-size:25px;letter-spacing:2px;color:#2E4A3C;">{{ g.title }}</div>
               <div style="color:#C1744E;font-size:17px;">✦</div>
@@ -114,7 +114,7 @@ export const landing = `
         <div style="font-size:13px;letter-spacing:5px;color:#C1744E;">N°02 — OUR STORY</div>
       </div>
       <div class="about-grid" style="display:grid;grid-template-columns:1fr 1.1fr;gap:64px;max-width:1100px;margin:0 auto;align-items:center;">
-        <div style="height:420px;border-radius:18px 120px 18px 18px;overflow:hidden;box-shadow:0 24px 60px rgba(42,51,44,.18);">
+        <div class="about-img" style="height:420px;border-radius:18px 120px 18px 18px;overflow:hidden;box-shadow:0 24px 60px rgba(42,51,44,.18);">
           <img src="images/about.png" alt="Inside Blue Sea Cafe" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>
         <div>
@@ -181,6 +181,31 @@ export const landing = `
       <div style="border-top:1px solid #3D5A4B;margin-top:30px;padding-top:18px;display:flex;justify-content:space-between;font-size:12.5px;padding-left:48px;padding-right:48px;flex-wrap:wrap;gap:10px;">
         <span>© 2026 Blue Sea Cafe</span>
         <a href="#" onClick="{{ goLoginA }}" style="color:#9DB3A6;">Staff login</a>
+      </div>
+    </div>
+    <div class="mnav">
+      <div class="mnav-inner">
+        <a href="#home" class="mnav-item">
+          <svg class="mnav-ico" viewBox="0 0 24 24"><path d="M4 11 L12 4 L20 11"></path><path d="M6 10 V20 H18 V10"></path></svg>
+          <span>Home</span>
+        </a>
+        <a href="#menu" class="mnav-item">
+          <svg class="mnav-ico" viewBox="0 0 24 24"><path d="M6 8 H16 V13 A4 4 0 0 1 12 17 A4 4 0 0 1 6 13 Z"></path><path d="M16 9 H18 A2 2 0 0 1 18 13 H16"></path></svg>
+          <span>Menu</span>
+        </a>
+        <a href="#about" class="mnav-item">
+          <svg class="mnav-ico" viewBox="0 0 24 24"><path d="M12 20 C12 13 12 9 12 4"></path><path d="M12 13 C7 12 4 8 4 4 C9 5 12 8 12 13"></path><path d="M12 13 C17 12 20 8 20 4 C15 5 12 8 12 13"></path></svg>
+          <span>About</span>
+        </a>
+        <a href="#track" class="mnav-item">
+          <svg class="mnav-ico" viewBox="0 0 24 24"><path d="M12 21 C12 21 5 14.5 5 9 A7 7 0 0 1 19 9 C19 14.5 12 21 12 21 Z"></path><circle cx="12" cy="9" r="2.4"></circle></svg>
+          <span>Track</span>
+        </a>
+        <button onClick="{{ openCart }}" class="mnav-item mnav-cart">
+          <svg class="mnav-ico" viewBox="0 0 24 24"><path d="M6 8 H18 L17 20 H7 Z"></path><path d="M9 8 V6 A3 3 0 0 1 15 6 V8"></path></svg>
+          <span>Cart</span>
+          <span class="mnav-badge {{ cartBadgeClass }}">{{ cartCount }}</span>
+        </button>
       </div>
     </div>
   </div>

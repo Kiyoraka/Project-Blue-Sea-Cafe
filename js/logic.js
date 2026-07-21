@@ -154,9 +154,10 @@ export function renderVals(state, props, app) {
     cartOpen: s.cartOpen,
     openCart: () => app.setState({ cartOpen: true }),
     closeCart: () => app.setState({ cartOpen: false }),
-    // has-items drives the desktop drawer; open drives the mobile sheet (different @media).
+    // has-items opens the desktop drawer; open opens it explicitly (Cart tab) and is
+    // the mobile full-page trigger (different @media handle each).
     cartPanelClass: (cartListArr.length ? 'has-items' : '') + (s.cartOpen ? ' open' : ''),
-    cartBarClass: (cartListArr.length && !s.cartOpen) ? 'show' : '',
+    cartBadgeClass: cartListArr.length ? 'show' : '',
     placeOrder: () => {
       if (cartListArr.length === 0) return;
       const no = pushOrder(s, app, 'Online', 'cart', { cartOpen: false });

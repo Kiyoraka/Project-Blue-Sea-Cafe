@@ -18,6 +18,7 @@ const MUSTACHE = /\{\{\s*([^}]+?)\s*\}\}/g;
 // Stateless presence check — never use the /g regex's .test() (its lastIndex is
 // stateful across calls and would misfire when the object is shared).
 const hasMustache = (str) => str.indexOf('{{') !== -1;
+const SVG_NS = 'http://www.w3.org/2000/svg';
 
 // Resolve a dotted path ("g.title", "trackPhone", "goOrder") against the
 // current scope chain first, then the top-level vals object.
@@ -136,7 +137,11 @@ function compileNode(node, vals) {
   }
 
   // Regular element — clone shallow, wire attribute + event + form bindings.
-  const el = document.createElement(tag);
+  // Use the source node's namespace + localName so inline SVG (svg/path/textPath…)
+  // is created in the SVG namespace and renders as vectors, not broken HTML.
+  const el = node.namespaceURI === SVG_NS
+    ? document.createElementNS(SVG_NS, node.localName)
+    : document.createElement(node.localName);
   const updaters = [];
 
   for (const attr of Array.from(node.attributes)) {

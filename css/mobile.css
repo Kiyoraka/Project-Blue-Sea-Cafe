@@ -1,19 +1,23 @@
 /* mobile.css — responsive layer, kept in its own file (separate mobile CSS).
-   All @media overrides ported verbatim from the design's <style> block.
-   The layout is single-source responsive: grids collapse to one column and the
-   nav links hide; no divergent mobile/desktop DOM. */
+   Base/desktop rules live in base.css (loaded first, so these win on ties). */
 
+/* Top nav links vanish and the mobile bottom nav takes over from the same width,
+   so there is never a stretch with no navigation. */
 @media (max-width: 1180px) {
   .nav-links { display: none !important; }
+  .mnav { display: block; }
+  #home { padding-bottom: 64px; }        /* clear the fixed bottom nav */
 }
 
 @media (max-width: 1100px) {
   .menu-grid { grid-template-columns: 1fr !important; }
 }
 
+/* Phone/tablet layout: grids collapse, top ORDER ONLINE button drops (hero CTA +
+   bottom nav cover it), and the cart becomes a full-page view. */
 @media (max-width: 920px) {
   .hero-grid { grid-template-columns: 1fr !important; }
-  .hero-left { padding: 64px 26px 52px !important; }
+  .hero-left { padding: 60px 24px 48px !important; }
   .hero-right { min-height: 480px; padding: 44px 24px !important; }
   .menu-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
   .about-grid { grid-template-columns: 1fr !important; gap: 34px !important; }
@@ -21,27 +25,25 @@
   .nav-pad { padding: 12px 18px !important; }
   .sec-head { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
   .stat-row { gap: 22px !important; }
+
+  .nav-cta { display: none !important; }  /* slim the top bar to logo + STAFF */
+
+  /* Cart = full-page view: slides in from the right, no sheet, no backdrop. */
+  .cart-panel {
+    inset: 0; width: 100%; max-width: 100%; height: 100%; max-height: none;
+    border-radius: 0; box-shadow: none;
+    transform: translateX(100%);
+  }
+  .cart-panel.has-items { transform: translateX(100%); }  /* items alone don't open */
+  .cart-panel.open { transform: translateX(0); }          /* Cart tab opens the page */
+  .cart-backdrop, .cart-backdrop.open { display: none; }
 }
 
-/* Inline cart on mobile: the drawer becomes a slide-up bottom sheet, and a
-   sticky bottom cart bar appears when there are items. These override the
-   desktop drawer rules from base.css (loaded first, so these win on ties). */
-@media (max-width: 920px) {
-  .cart-panel {
-    top: auto; bottom: 0; left: 0; right: 0;
-    width: 100%; max-width: 100%; height: auto; max-height: 86vh;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -18px 50px rgba(42, 51, 44, .22);
-    transform: translateY(100%);
-  }
-  /* Items alone do NOT open the sheet on mobile (the bar shows instead) --
-     only the `open` class (tapping the bar) slides it up. */
-  .cart-panel.has-items { transform: translateY(100%); }
-  .cart-panel.open { transform: translateY(0); }
-  .cart-backdrop.open { display: block; opacity: 1; }
-  .cart-bar.show {
-    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 44;
-    background: #2E4A3C; color: #F4EEE3; padding: 15px 20px; cursor: pointer;
-    font-size: 14px; box-shadow: 0 -10px 30px rgba(42, 51, 44, .25);
-  }
+/* Tighter rhythm for small phones. */
+@media (max-width: 600px) {
+  .sec-pad { padding: 52px 18px !important; }
+  .menu-card { padding: 28px 24px !important; }
+  .about-img { height: 300px !important; border-radius: 16px 70px 16px 16px !important; }
+  .hero-left { padding: 52px 20px 44px !important; }
+  .stat-row { flex-direction: column !important; gap: 14px !important; }
 }

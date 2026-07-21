@@ -14,9 +14,12 @@ a:hover { color: #A85F3D; }
 * { box-sizing: border-box; }
 input, select, button { font-family: 'Jost', sans-serif; }
 
+/* anchored section jumps clear the sticky top bar */
+#home, #menu, #about, #track { scroll-margin-top: 72px; }
+
 /* ---- Inline cart ----------------------------------------------------------
-   Default (desktop): a right-side drawer that slides in when the cart has items.
-   Mobile overrides (bottom sheet + sticky bar) live in mobile.css. */
+   Default (desktop): a right-side drawer that slides in when the cart has items,
+   or when explicitly opened via the Cart tab. Mobile = full-page (mobile.css). */
 .cart-backdrop {
   position: fixed; inset: 0; z-index: 45;
   background: rgba(42, 51, 44, .45);
@@ -30,7 +33,7 @@ input, select, button { font-family: 'Jost', sans-serif; }
   transform: translateX(100%);
   transition: transform .32s cubic-bezier(.4, 0, .2, 1);
 }
-.cart-panel.has-items { transform: translateX(0); }
+.cart-panel.has-items, .cart-panel.open { transform: translateX(0); }
 .cart-panel-head {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 22px; border-bottom: 1px solid #E3DCCB;
@@ -42,9 +45,32 @@ input, select, button { font-family: 'Jost', sans-serif; }
   font-size: 24px; line-height: 1; color: #7A8378; cursor: pointer; border-radius: 8px;
 }
 .cart-close:hover { background: #F0EADB; color: #2E4A3C; }
-.cart-bar { display: none; align-items: center; gap: 12px; }
-.cart-bar-count {
-  background: #C1744E; color: #FBF8F1; min-width: 22px; height: 22px;
-  border-radius: 11px; display: inline-grid; place-items: center;
-  font-size: 12.5px; padding: 0 6px;
+
+/* ---- Mobile bottom navigation ---------------------------------------------
+   Hidden by default (desktop >1180px). Shown at <=1180px in mobile.css. */
+.mnav {
+  display: none;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 43;
+  background: rgba(251, 248, 241, .96); backdrop-filter: blur(10px);
+  border-top: 1px solid #E3DCCB;
+  padding-bottom: env(safe-area-inset-bottom);
 }
+.mnav-inner {
+  max-width: 600px; margin: 0 auto;
+  display: flex; justify-content: space-around; align-items: stretch;
+}
+.mnav-item {
+  flex: 1; background: transparent; border: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 9px 4px 8px; color: #2E4A3C;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  position: relative; transition: color .2s;
+}
+.mnav-item:hover, .mnav-item:active { color: #C1744E; }
+.mnav-ico { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.mnav-badge {
+  display: none; position: absolute; top: 4px; left: 50%; margin-left: 6px;
+  background: #C1744E; color: #FBF8F1; min-width: 16px; height: 16px;
+  border-radius: 8px; place-items: center; font-size: 10px; letter-spacing: 0; padding: 0 4px;
+}
+.mnav-badge.show { display: grid; }

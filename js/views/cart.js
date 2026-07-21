@@ -1,7 +1,8 @@
 // cart.js — inline ordering cart. One shared panel styled per device via CSS:
-// a right-side drawer on desktop, a slide-up bottom sheet on mobile. Plus a
-// mobile-only sticky bottom cart bar. Always mounted; classes toggle so CSS
-// transitions animate the slide. Replaces the old full-page order view.
+// a right-side drawer on desktop, a full-page view on mobile (slides in from the
+// right, no sheet/backdrop). Opened from the mobile bottom-nav Cart tab or, on
+// desktop, whenever the cart has items. Always mounted; classes toggle so CSS
+// transitions animate it. Replaces the old full-page order view.
 
 export const cart = `
 <div class="cart-backdrop {{ cartPanelClass }}" onClick="{{ closeCart }}"></div>
@@ -37,12 +38,5 @@ export const cart = `
     </div>
     <button onClick="{{ placeOrder }}" style="width:100%;background:#C1744E;color:#FBF8F1;border:none;padding:14px;font-size:15px;letter-spacing:1px;cursor:pointer;border-radius:8px;" style-hover="background:#A85F3D;">PLACE ORDER · {{ cartTotalStr }}</button>
   </div>
-</div>
-<div class="cart-bar {{ cartBarClass }}" onClick="{{ openCart }}">
-  <span style="font-weight:600;letter-spacing:2px;">CART</span>
-  <span class="cart-bar-count">{{ cartCount }}</span>
-  <span style="flex:1;"></span>
-  <span style="font-weight:600;">{{ cartTotalStr }}</span>
-  <span style="font-size:16px;margin-left:4px;">↑</span>
 </div>
 `;
