@@ -20,7 +20,7 @@ export const landing = `
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
         <button onClick="{{ goMenu }}" class="nav-cta" style="background:#C1744E;border:none;color:#FBF8F1;padding:11px 24px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-1px);">ORDER ONLINE</button>
-        <button onClick="{{ goLogin }}" style="background:transparent;border:1px solid #CBBFA6;color:#2E4A3C;padding:10px 18px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;" style-hover="border-color:#2E4A3C;">STAFF</button>
+        <button onClick="{{ goLogin }}" style="background:transparent;border:1px solid #CBBFA6;color:#2E4A3C;padding:10px 18px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;" style-hover="border-color:#2E4A3C;">LOGIN</button>
       </div>
     </div>
     <div class="hero-grid" style="display:grid;grid-template-columns:1.15fr 1fr;min-height:calc(100vh - 68px);">
@@ -180,7 +180,7 @@ export const landing = `
       </div>
       <div style="border-top:1px solid #3D5A4B;margin-top:30px;padding-top:18px;display:flex;justify-content:space-between;font-size:12.5px;padding-left:48px;padding-right:48px;flex-wrap:wrap;gap:10px;">
         <span>© 2026 Blue Sea Cafe</span>
-        <a href="#" onClick="{{ goLoginA }}" style="color:#9DB3A6;">Staff login</a>
+        <a href="#" onClick="{{ goLoginA }}" style="color:#9DB3A6;">Login</a>
       </div>
     </div>
     <div class="mnav">
