@@ -5,6 +5,7 @@ import { analysisTab } from './analysis.js';
 import { productTab } from './product.js';
 import { orderTab } from './order.js';
 import { posTab } from './pos.js';
+import { customerTab } from './customer.js';
 import { settingTab } from './setting.js';
 
 export const appView = `
@@ -28,6 +29,7 @@ export const appView = `
       ${productTab}
       ${orderTab}
       ${posTab}
+      ${customerTab}
       ${settingTab}
     </div>
   </div>

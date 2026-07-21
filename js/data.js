@@ -17,6 +17,15 @@ export const initialState = {
   nextItemId: 9, nextOrderNo: 1043,
   cart: {}, cartOpen: false, cartDismissed: false, payMethod: 'DuitNow QR',
   loginId: '', loginPin: '', pwVisible: false, staffId: 'BS-001',
+  // Customer accounts (phone-only). Initial password = name + phone; must change on
+  // first login. Debt is derived from the matching VIP tab balance at render time.
+  customers: [
+    { phone: '012-3456789', name: 'Dato Rahman', password: 'Dato Rahman012-3456789', mustChange: true },
+    { phone: '019-8877665', name: 'Ms. Lily Tan', password: 'Ms. Lily Tan019-8877665', mustChange: true },
+  ],
+  custPhone: '', custTab: 'main',
+  pwNew: '', pwConfirm: '',
+  guestName: '', guestPhone: '',
   orders: [
     { id: '#1040', src: 'Table 4', items: [[2, 2], [5, 1]], status: 'Preparing' },
     { id: '#1041', src: 'Delivery', items: [[1, 1], [7, 2]], status: 'New' },

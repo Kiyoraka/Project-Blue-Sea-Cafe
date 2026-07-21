@@ -74,3 +74,33 @@ input, select, button { font-family: 'Jost', sans-serif; }
   border-radius: 8px; place-items: center; font-size: 10px; letter-spacing: 0; padding: 0 4px;
 }
 .mnav-badge.show { display: grid; }
+
+/* ---- Customer dashboard (phone-style column) ------------------------------ */
+.cust-wrap {
+  max-width: 480px; margin: 0 auto; height: 100vh; overflow: hidden;
+  background: #FBF8F1; box-shadow: 0 0 60px rgba(42, 51, 44, .15);
+  display: flex; flex-direction: column;
+}
+.cust-head {
+  background: #2E4A3C; color: #F4EEE3; padding: 18px 22px; flex-shrink: 0;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.cust-body {
+  flex: 1; overflow: auto;
+  background: radial-gradient(circle at 92% 0%, rgba(86, 112, 95, .10), transparent 40%),
+              radial-gradient(circle at 0% 100%, rgba(193, 116, 78, .08), transparent 45%), #F4EEE3;
+}
+.cnav {
+  display: flex; flex-shrink: 0; border-top: 1px solid #E3DCCB;
+  background: rgba(251, 248, 241, .96); backdrop-filter: blur(10px);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.cnav-item {
+  flex: 1; background: transparent; border: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 10px 4px 9px; color: #7A8378;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; transition: color .2s;
+}
+.cnav-item.active { color: #C1744E; }
+.cnav-item:hover { color: #2E4A3C; }
+.cnav-ico { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }

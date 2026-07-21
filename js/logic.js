@@ -59,14 +59,25 @@ function cartTotal(state, key) {
   return Object.entries(state[key]).reduce((s, [id, q]) => s + (map[id] ? map[id].price : 0) * q, 0);
 }
 
-function pushOrder(state, app, src, cartKey, extra) {
+function pushOrder(state, app, src, cartKey, extra, phone) {
   const items = Object.entries(state[cartKey]).filter(([, q]) => q > 0).map(([id, q]) => [+id, q]);
   const no = '#' + state.nextOrderNo;
   app.setState((s) => ({
-    orders: [{ id: no, src, items, status: 'New' }, ...s.orders],
+    orders: [{ id: no, src, items, status: 'New', phone: phone || '' }, ...s.orders],
     nextOrderNo: s.nextOrderNo + 1, [cartKey]: {}, ...extra,
   }));
   return no;
+}
+
+// Customer helpers: match by digits-only phone; debt mirrors the VIP tab balance.
+const normPhone = (p) => (p || '').replace(/\D/g, '');
+function customerByPhone(state, phone) {
+  const n = normPhone(phone);
+  return state.customers.find((c) => normPhone(c.phone) === n) || null;
+}
+function customerDebt(state, phone) {
+  const v = state.vips.find((x) => normPhone(x.phone) === normPhone(phone));
+  return v ? v.bal : 0;
 }
 
 export function renderVals(state, props, app) {
@@ -85,7 +96,7 @@ export function renderVals(state, props, app) {
   const cartListArr = cartOps(s, app, 'cart');
   const cartTotalVal = cartTotal(s, 'cart');
   const navBadges = { order: String(s.orders.filter((o) => o.status === 'New').length || '') };
-  const navItems = [['main', 'Main'], ['analysis', 'Analysis'], ['product', 'Product'], ['order', 'Order'], ['pos', 'POS'], ['setting', 'Setting']]
+  const navItems = [['main', 'Main'], ['analysis', 'Analysis'], ['product', 'Product'], ['order', 'Order'], ['pos', 'POS'], ['customer', 'Customer'], ['setting', 'Setting']]
     .map(([key, label]) => ({
       label, badge: key === 'order' ? navBadges.order : '',
       bg: tab === key ? '#C1744E' : 'transparent',
@@ -104,11 +115,25 @@ export function renderVals(state, props, app) {
   const posSub = cartTotal(s, 'posCart');
   const posSst = posSub * sstRate;
   const posCartListArr = cartOps(s, app, 'posCart');
+  // Customer account context (logged-in customer + their orders).
+  const showCart = view === 'landing'; // the floating cart drawer belongs to the site only
+  const cust = customerByPhone(s, s.custPhone);
+  const custOrders = s.orders.filter((o) => s.custPhone && normPhone(o.phone) === normPhone(s.custPhone));
+  const custDebt = customerDebt(s, s.custPhone);
+  const custMenu = s.items.map((i) => ({
+    ...deco(i),
+    add: () => app.setState((st) => ({ cart: { ...st.cart, [i.id]: (st.cart[i.id] || 0) + 1 }, cartDismissed: false })),
+  }));
+  const customerRows = s.customers.map((c) => {
+    const co = s.orders.filter((o) => normPhone(o.phone) === normPhone(c.phone));
+    return { name: c.name, phone: c.phone, debtStr: rm(customerDebt(s, c.phone)), count: String(co.length), last: co[0] ? co[0].id : '—' };
+  });
   return {
     isLanding: view === 'landing', isOrder: view === 'order', isLogin: view === 'login', isApp: view === 'app',
+    isCustomer: view === 'customer', isPwchange: view === 'pwchange',
     tabMain: tab === 'main', tabAnalysis: tab === 'analysis', tabProduct: tab === 'product',
-    tabOrder: tab === 'order', tabPos: tab === 'pos', tabSetting: tab === 'setting',
-    goLanding: () => app.setState({ view: 'landing' }),
+    tabOrder: tab === 'order', tabPos: tab === 'pos', tabCustomer: tab === 'customer', tabSetting: tab === 'setting',
+    goLanding: () => app.setState({ view: 'landing', custPhone: '', custTab: 'main' }),
     goLoginA: (e) => { e.preventDefault(); app.setState({ view: 'login' }); },
     menuGroups: [
       { title: 'COFFEE', tagline: 'pulled to order, beans roasted weekly' },
@@ -143,7 +168,7 @@ export function renderVals(state, props, app) {
         weight: i === cur ? 600 : 400,
       }));
     })(),
-    goLandingA: (e) => { e.preventDefault(); app.setState({ view: 'landing' }); },
+    goLandingA: (e) => { e.preventDefault(); app.setState({ view: 'landing', custPhone: '', custTab: 'main' }); },
     goLogin: () => app.setState({ view: 'login' }),
     goMenu: () => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' }),
     // Inline cart (public site): right drawer on desktop, bottom sheet on mobile.
@@ -157,12 +182,20 @@ export function renderVals(state, props, app) {
     // d-open drives the desktop drawer (auto-shows when the cart has items unless the
     // user dismissed it with x; the Cart tab forces it open). open drives the mobile
     // full-page view (Cart tab only). Different @media handle each; x closes both.
-    cartPanelClass: (((cartListArr.length && !s.cartDismissed) || s.cartOpen) ? 'd-open' : '')
-      + (s.cartOpen ? ' open' : ''),
+    cartPanelClass: (showCart && ((cartListArr.length && !s.cartDismissed) || s.cartOpen) ? 'd-open' : '')
+      + (showCart && s.cartOpen ? ' open' : ''),
     cartBadgeClass: cartListArr.length ? 'show' : '',
     placeOrder: () => {
       if (cartListArr.length === 0) return;
-      const no = pushOrder(s, app, 'Online', 'cart', { cartOpen: false });
+      const loggedIn = !!s.custPhone;
+      const name = loggedIn ? (cust ? cust.name : '') : s.guestName.trim();
+      const phone = loggedIn ? s.custPhone : s.guestPhone.trim();
+      if (!loggedIn && (!name || !phone)) { showToast(app, 'Enter your name and phone to order'); return; }
+      // Create the customer on first order (password = name + phone, must change on login).
+      if (!loggedIn && !customerByPhone(s, phone)) {
+        app.setState((st) => ({ customers: [...st.customers, { phone, name, password: name + phone, mustChange: true }] }));
+      }
+      const no = pushOrder(s, app, 'Online', 'cart', { cartOpen: false, guestName: '', guestPhone: '' }, phone);
       app.setState((st) => ({ salesToday: st.salesToday + cartTotalVal, txToday: st.txToday + 1 }));
       showToast(app, 'Order sent · ' + no + ' · ' + rm(cartTotalVal));
     },
@@ -173,11 +206,21 @@ export function renderVals(state, props, app) {
     pwVisible: s.pwVisible, pwHidden: !s.pwVisible,
     togglePw: () => app.setState((st) => ({ pwVisible: !st.pwVisible })),
     doLogin: () => {
-      const id = s.loginId.trim() || 'BS-001';
-      app.setState({ view: 'app', staffId: id, tab: 'main' });
-      showToast(app, 'Welcome back, ' + id);
+      const id = s.loginId.trim();
+      if (!id) { showToast(app, 'Enter your phone or email'); return; }
+      // Staff sign in with an email; customers use only a phone number.
+      if (id.includes('@')) {
+        app.setState({ view: 'app', staffId: id, tab: 'main', loginPin: '' });
+        showToast(app, 'Welcome back');
+        return;
+      }
+      const c = customerByPhone(s, id);
+      if (!c) { showToast(app, 'No account yet — place an order to create one'); return; }
+      if (s.loginPin !== c.password) { showToast(app, 'Wrong password'); return; }
+      if (c.mustChange) { app.setState({ view: 'pwchange', custPhone: c.phone, pwNew: '', pwConfirm: '', loginPin: '' }); return; }
+      app.setState({ view: 'customer', custPhone: c.phone, custTab: 'main', loginPin: '' });
     },
-    logout: () => app.setState({ view: 'landing', loginId: '', loginPin: '' }),
+    logout: () => app.setState({ view: 'landing', loginId: '', loginPin: '', custPhone: '', custTab: 'main' }),
     staffId: s.staffId, navItems,
     stats: [
       { label: 'SALES TODAY', value: rm(s.salesToday), sub: '+12% vs last Mon' },
@@ -269,6 +312,54 @@ export function renderVals(state, props, app) {
       { name: 'Siti', id: 'BS-002', role: 'Cashier' },
       { name: 'Hafiz', id: 'BS-003', role: 'Barista' },
     ],
+
+    // ---- Customer account + dashboard ----------------------------------------
+    custName: cust ? cust.name : '', custPhoneStr: s.custPhone,
+    cMain: s.custTab === 'main', cOrder: s.custTab === 'order',
+    cHistory: s.custTab === 'history', cSetting: s.custTab === 'setting',
+    custDebtStr: rm(custDebt),
+    custCards: [
+      { label: 'DEBT', value: rm(custDebt), sub: custDebt > 0 ? 'outstanding — settle at counter' : 'all settled' },
+      { label: 'ORDERS', value: String(custOrders.length), sub: 'placed with this account' },
+    ],
+    custRecent: custOrders.slice(0, 4).map((o) => orderRow(s, app, o, s.orders.indexOf(o))),
+    custHistory: custOrders.map((o) => orderRow(s, app, o, s.orders.indexOf(o))),
+    custHasOrders: custOrders.length > 0, custNoOrders: custOrders.length === 0,
+    goCMain: () => app.setState({ custTab: 'main' }),
+    goCOrder: () => app.setState({ custTab: 'order' }),
+    goCHistory: () => app.setState({ custTab: 'history' }),
+    goCSetting: () => app.setState({ custTab: 'setting' }),
+    cMainCls: s.custTab === 'main' ? 'active' : '',
+    cOrderCls: s.custTab === 'order' ? 'active' : '',
+    cHistoryCls: s.custTab === 'history' ? 'active' : '',
+    cSettingCls: s.custTab === 'setting' ? 'active' : '',
+    custMenu,
+    custLogout: () => app.setState({ view: 'landing', custPhone: '', custTab: 'main', loginId: '', loginPin: '' }),
+
+    // password change — used by the first-login gate AND the Setting tab
+    pwNew: s.pwNew, pwConfirm: s.pwConfirm,
+    setPwNew: (e) => app.setState({ pwNew: e.target.value }),
+    setPwConfirm: (e) => app.setState({ pwConfirm: e.target.value }),
+    savePw: () => {
+      if (!s.pwNew.trim()) { showToast(app, 'Enter a new password'); return; }
+      if (s.pwNew !== s.pwConfirm) { showToast(app, 'Passwords do not match'); return; }
+      const fromGate = s.view === 'pwchange';
+      app.setState((st) => ({
+        customers: st.customers.map((c) => (c.phone === st.custPhone ? { ...c, password: st.pwNew, mustChange: false } : c)),
+        pwNew: '', pwConfirm: '',
+        ...(fromGate ? { view: 'customer', custTab: 'main' } : {}),
+      }));
+      showToast(app, 'Password updated');
+    },
+
+    // guest checkout identity (name + phone captured at PLACE ORDER)
+    isGuest: !s.custPhone, guestName: s.guestName, guestPhone: s.guestPhone,
+    setGuestName: (e) => app.setState({ guestName: e.target.value }),
+    setGuestPhone: (e) => app.setState({ guestPhone: e.target.value }),
+
+    // staff Customer tab (read-only list)
+    customerRows,
+
     hasToast: !!s.toast, toastMsg: s.toast,
   };
 }

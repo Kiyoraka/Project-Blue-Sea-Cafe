@@ -7,7 +7,9 @@ import { renderVals } from './logic.js';
 import { landing } from './views/landing.js';
 import { cart } from './views/cart.js';
 import { login } from './views/login.js';
+import { pwchange } from './views/pwchange.js';
 import { appView } from './views/app/shell.js';
+import { customer } from './views/customer/shell.js';
 import { editModal, toast } from './views/modals.js';
 
 // Design props (data-props defaults from the source): deliveryRadiusKm=5, sstPercent=6.
@@ -18,7 +20,9 @@ const template = `
   ${landing}
   ${cart}
   ${login}
+  ${pwchange}
   ${appView}
+  ${customer}
   ${editModal}
   ${toast}
 </div>

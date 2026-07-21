@@ -31,6 +31,12 @@ export const cart = `
     </sc-if>
   </div>
   <div class="cart-panel-foot">
+    <sc-if value="{{ isGuest }}">
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input value="{{ guestName }}" onChange="{{ setGuestName }}" placeholder="Your name" style="flex:1;min-width:0;padding:10px 11px;border:1px solid #E3DCCB;background:#FBF8F1;font-size:14px;border-radius:6px;outline:none;">
+        <input value="{{ guestPhone }}" onChange="{{ setGuestPhone }}" placeholder="Phone e.g. 012-3456789" style="flex:1;min-width:0;padding:10px 11px;border:1px solid #E3DCCB;background:#FBF8F1;font-size:14px;border-radius:6px;outline:none;">
+      </div>
+    </sc-if>
     <div style="display:flex;gap:8px;margin-bottom:12px;">
       <sc-for list="{{ payOptions }}" as="p">
         <button onClick="{{ p.pick }}" style="flex:1;padding:9px 4px;font-size:12.5px;border:1px solid {{ p.bd }};background:{{ p.bg }};color:{{ p.fg }};cursor:pointer;border-radius:6px;">{{ p.name }}</button>
