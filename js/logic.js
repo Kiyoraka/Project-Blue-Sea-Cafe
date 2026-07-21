@@ -323,11 +323,32 @@ export function renderVals(state, props, app) {
     stationRows: s.stations.map((name, i) => ({ name, remove: () => app.setState((st) => ({ stations: st.stations.filter((_, j) => j !== i) })) })),
     newStation: s.newStation, setNewStation: (e) => app.setState({ newStation: e.target.value }),
     addStation: () => { if (!s.newStation.trim()) return; app.setState((st) => ({ stations: [...st.stations, st.newStation.trim()], newStation: '' })); },
-    staffRows: [
-      { name: 'Aiman (you)', id: 'BS-001', role: 'Manager' },
-      { name: 'Siti', id: 'BS-002', role: 'Cashier' },
-      { name: 'Hafiz', id: 'BS-003', role: 'Barista' },
-    ].map((r, i) => ({ ...r, no: String(i + 1) })),
+    staffRows: s.staff.map((m, i) => ({
+      no: String(i + 1), name: m.name, id: m.id, role: m.role,
+      edit: () => app.setState({ editingStaffKey: m.key, editStaffName: m.name, editStaffId: m.id, editStaffRole: m.role }),
+      del: () => app.setState((st) => ({ staff: st.staff.filter((x) => x.key !== m.key) })),
+    })),
+    addStaff: () => {
+      const key = s.nextStaffKey;
+      app.setState((st) => ({
+        staff: [...st.staff, { key, name: 'New Staff', id: 'BS-00' + key, role: 'Cashier' }],
+        nextStaffKey: key + 1,
+        editingStaffKey: key, editStaffName: 'New Staff', editStaffId: 'BS-00' + key, editStaffRole: 'Cashier',
+      }));
+    },
+    staffEditing: s.editingStaffKey !== null,
+    editStaffName: s.editStaffName, editStaffId: s.editStaffId, editStaffRole: s.editStaffRole,
+    setEditStaffName: (e) => app.setState({ editStaffName: e.target.value }),
+    setEditStaffId: (e) => app.setState({ editStaffId: e.target.value }),
+    setEditStaffRole: (e) => app.setState({ editStaffRole: e.target.value }),
+    closeStaffEdit: () => app.setState({ editingStaffKey: null }),
+    saveStaff: () => {
+      app.setState((st) => ({
+        staff: st.staff.map((x) => (x.key === st.editingStaffKey ? { ...x, name: st.editStaffName, id: st.editStaffId, role: st.editStaffRole } : x)),
+        editingStaffKey: null,
+      }));
+      showToast(app, 'Staff saved');
+    },
 
     // ---- Sidebar dropdown groups + Kitchen/Bar displays ----------------------
     navMain: navItem('main'), navAnalysis: navItem('analysis'), navSetting: navItem('setting'),
