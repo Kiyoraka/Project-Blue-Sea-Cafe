@@ -16,7 +16,7 @@ export const initialState = {
   ],
   nextItemId: 9, nextOrderNo: 1043,
   cart: {}, cartOpen: false, cartDismissed: false, payMethod: 'DuitNow QR',
-  loginId: '', loginPin: '', staffId: 'BS-001',
+  loginId: '', loginPin: '', pwVisible: false, staffId: 'BS-001',
   orders: [
     { id: '#1040', src: 'Table 4', items: [[2, 2], [5, 1]], status: 'Preparing' },
     { id: '#1041', src: 'Delivery', items: [[1, 1], [7, 2]], status: 'New' },

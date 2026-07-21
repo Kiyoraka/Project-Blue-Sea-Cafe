@@ -169,6 +169,9 @@ export function renderVals(state, props, app) {
     loginId: s.loginId, loginPin: s.loginPin,
     setLoginId: (e) => app.setState({ loginId: e.target.value }),
     setLoginPin: (e) => app.setState({ loginPin: e.target.value }),
+    pwType: s.pwVisible ? 'text' : 'password',
+    pwVisible: s.pwVisible, pwHidden: !s.pwVisible,
+    togglePw: () => app.setState((st) => ({ pwVisible: !st.pwVisible })),
     doLogin: () => {
       const id = s.loginId.trim() || 'BS-001';
       app.setState({ view: 'app', staffId: id, tab: 'main' });
