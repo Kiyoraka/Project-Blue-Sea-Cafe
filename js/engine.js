@@ -49,13 +49,14 @@ function compileNode(node, vals) {
     const raw = node.nodeValue;
     const t = document.createTextNode('');
     if (hasMustache(raw)) {
-      return { nodes: [t], update: (s) => { t.nodeValue = interp(raw, s, vals); } };
+      return { nodes: [t], update: (s) => { t.nodeValue = interp(raw, s, vals); }, remove: () => t.remove() };
     }
     t.nodeValue = raw;
-    return { nodes: [t], update: () => {} };
+    return { nodes: [t], update: () => {}, remove: () => t.remove() };
   }
   if (node.nodeType !== Node.ELEMENT_NODE) {
-    return { nodes: [node.cloneNode(true)], update: () => {} };
+    const clone = node.cloneNode(true);
+    return { nodes: [clone], update: () => {}, remove: () => clone.remove() };
   }
 
   const tag = node.tagName.toLowerCase();
@@ -67,6 +68,13 @@ function compileNode(node, vals) {
     const childNodes = Array.from(node.childNodes);
     let mounted = false;
     let children = [];
+    const unmount = () => {
+      // Recursive: child.remove() tears down nested dynamic blocks too, so no
+      // node inserted by an inner sc-if/sc-for is ever orphaned.
+      children.forEach((c) => c.remove());
+      children = [];
+      mounted = false;
+    };
     return {
       nodes: [anchor],
       update: (s) => {
@@ -78,12 +86,11 @@ function compileNode(node, vals) {
           anchor.parentNode.insertBefore(frag, anchor.nextSibling);
           mounted = true;
         } else if (!on && mounted) {
-          children.forEach((c) => c.nodes.forEach((n) => n.remove()));
-          children = [];
-          mounted = false;
+          unmount();
         }
         if (mounted) children.forEach((c) => c.update(s));
       },
+      remove: () => { unmount(); anchor.remove(); },
     };
   }
 
@@ -113,7 +120,7 @@ function compileNode(node, vals) {
               const flat = built.flatMap((b) => b.nodes);
               return flat[flat.length - 1];
             },
-            remove() { built.forEach((b) => b.nodes.forEach((n) => n.remove())); },
+            remove() { built.forEach((b) => b.remove()); },
           });
         }
         // Shrink
@@ -124,6 +131,7 @@ function compileNode(node, vals) {
           instances[i].built.forEach((b) => b.update(childScope));
         }
       },
+      remove: () => { instances.forEach((i) => i.remove()); instances.length = 0; anchor.remove(); },
     };
   }
 
@@ -184,6 +192,9 @@ function compileNode(node, vals) {
   return {
     nodes: [el],
     update: (s) => { updaters.forEach((u) => u(s)); kids.forEach((k) => k.update(s)); },
+    // Removing the element removes its whole subtree, including any nodes that
+    // nested sc-if/sc-for inserted as descendants of this element.
+    remove: () => el.remove(),
   };
 }
 
