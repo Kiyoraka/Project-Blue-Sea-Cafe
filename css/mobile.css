@@ -22,3 +22,26 @@
   .sec-head { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
   .stat-row { gap: 22px !important; }
 }
+
+/* Inline cart on mobile: the drawer becomes a slide-up bottom sheet, and a
+   sticky bottom cart bar appears when there are items. These override the
+   desktop drawer rules from base.css (loaded first, so these win on ties). */
+@media (max-width: 920px) {
+  .cart-panel {
+    top: auto; bottom: 0; left: 0; right: 0;
+    width: 100%; max-width: 100%; height: auto; max-height: 86vh;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -18px 50px rgba(42, 51, 44, .22);
+    transform: translateY(100%);
+  }
+  /* Items alone do NOT open the sheet on mobile (the bar shows instead) --
+     only the `open` class (tapping the bar) slides it up. */
+  .cart-panel.has-items { transform: translateY(100%); }
+  .cart-panel.open { transform: translateY(0); }
+  .cart-backdrop.open { display: block; opacity: 1; }
+  .cart-bar.show {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 44;
+    background: #2E4A3C; color: #F4EEE3; padding: 15px 20px; cursor: pointer;
+    font-size: 14px; box-shadow: 0 -10px 30px rgba(42, 51, 44, .25);
+  }
+}

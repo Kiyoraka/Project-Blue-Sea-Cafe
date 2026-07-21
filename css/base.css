@@ -13,3 +13,38 @@ a { color: #C1744E; text-decoration: none; }
 a:hover { color: #A85F3D; }
 * { box-sizing: border-box; }
 input, select, button { font-family: 'Jost', sans-serif; }
+
+/* ---- Inline cart ----------------------------------------------------------
+   Default (desktop): a right-side drawer that slides in when the cart has items.
+   Mobile overrides (bottom sheet + sticky bar) live in mobile.css. */
+.cart-backdrop {
+  position: fixed; inset: 0; z-index: 45;
+  background: rgba(42, 51, 44, .45);
+  display: none; opacity: 0; transition: opacity .25s;
+}
+.cart-panel {
+  position: fixed; top: 0; right: 0; z-index: 46;
+  height: 100vh; width: 400px; max-width: 88vw;
+  background: #FBF8F1; box-shadow: -18px 0 50px rgba(42, 51, 44, .18);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .32s cubic-bezier(.4, 0, .2, 1);
+}
+.cart-panel.has-items { transform: translateX(0); }
+.cart-panel-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 22px; border-bottom: 1px solid #E3DCCB;
+}
+.cart-panel-body { flex: 1; overflow: auto; padding: 6px 22px; }
+.cart-panel-foot { padding: 16px 22px; border-top: 2px solid #2E4A3C; background: #FBF8F1; }
+.cart-close {
+  width: 34px; height: 34px; border: none; background: transparent;
+  font-size: 24px; line-height: 1; color: #7A8378; cursor: pointer; border-radius: 8px;
+}
+.cart-close:hover { background: #F0EADB; color: #2E4A3C; }
+.cart-bar { display: none; align-items: center; gap: 12px; }
+.cart-bar-count {
+  background: #C1744E; color: #FBF8F1; min-width: 22px; height: 22px;
+  border-radius: 11px; display: inline-grid; place-items: center;
+  font-size: 12.5px; padding: 0 6px;
+}

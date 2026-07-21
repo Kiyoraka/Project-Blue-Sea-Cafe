@@ -15,8 +15,7 @@ export const initialState = {
     { id: 8, name: 'Butter Croissant', price: 7, cat: 'Cakes', station: 'Kitchen', color: '#2E4A3C' },
   ],
   nextItemId: 9, nextOrderNo: 1043,
-  cart: {}, orderCat: 'All', payMethod: 'DuitNow QR', tableNo: '12',
-  orderPlaced: false, lastOrderId: '', lastOrderTotal: '',
+  cart: {}, cartOpen: false, payMethod: 'DuitNow QR',
   loginId: '', loginPin: '', staffId: 'BS-001',
   orders: [
     { id: '#1040', src: 'Table 4', items: [[2, 2], [5, 1]], status: 'Preparing' },

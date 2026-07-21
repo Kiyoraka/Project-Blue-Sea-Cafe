@@ -5,7 +5,7 @@ import { createApp } from './engine.js';
 import { initialState } from './data.js';
 import { renderVals } from './logic.js';
 import { landing } from './views/landing.js';
-import { order } from './views/order.js';
+import { cart } from './views/cart.js';
 import { login } from './views/login.js';
 import { appView } from './views/app/shell.js';
 import { editModal, toast } from './views/modals.js';
@@ -16,7 +16,7 @@ const props = { deliveryRadiusKm: 5, sstPercent: 6 };
 const template = `
 <div style="min-height:100vh;background:#F4EEE3;">
   ${landing}
-  ${order}
+  ${cart}
   ${login}
   ${appView}
   ${editModal}

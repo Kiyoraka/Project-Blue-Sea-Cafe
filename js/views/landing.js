@@ -19,7 +19,7 @@ export const landing = `
         <a href="#track" style="color:#2E4A3C;padding-bottom:2px;border-bottom:1.5px solid transparent;" style-hover="color:#C1744E;border-bottom-color:#C1744E;">TRACK ORDER</a>
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
-        <button onClick="{{ goOrder }}" style="background:#C1744E;border:none;color:#FBF8F1;padding:11px 24px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-1px);">ORDER ONLINE</button>
+        <button onClick="{{ goMenu }}" style="background:#C1744E;border:none;color:#FBF8F1;padding:11px 24px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-1px);">ORDER ONLINE</button>
         <button onClick="{{ goLogin }}" style="background:transparent;border:1px solid #CBBFA6;color:#2E4A3C;padding:10px 18px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;" style-hover="border-color:#2E4A3C;">STAFF</button>
       </div>
     </div>
@@ -35,7 +35,7 @@ export const landing = `
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(56px,6.8vw,104px);line-height:1;color:#C1744E;animation:fadeUp .8s .22s both;">good coffee.</div>
         <div style="font-size:17px;color:#9DB3A6;line-height:1.7;max-width:440px;margin-top:26px;animation:fadeUp .8s .34s both;">Caffeine, sourdough &amp; pastries by the blue sea. Scan the QR at your table, order online, or let us ride it over to you.</div>
         <div style="display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;animation:fadeUp .8s .46s both;">
-          <button onClick="{{ goOrder }}" style="background:#C1744E;color:#FBF8F1;border:none;padding:16px 34px;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-2px);">ORDER ONLINE →</button>
+          <button onClick="{{ goMenu }}" style="background:#C1744E;color:#FBF8F1;border:none;padding:16px 34px;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-2px);">ORDER ONLINE →</button>
           <a href="#menu" style="display:inline-block;color:#F4EEE3;border:1px solid #56705F;padding:15px 34px;font-size:14px;letter-spacing:2px;border-radius:999px;transition:border-color .2s;" style-hover="border-color:#C1744E;color:#F4EEE3;">SEE THE MENU</a>
         </div>
         <div class="stat-row" style="display:flex;gap:40px;margin-top:52px;background:rgba(251,248,241,.08);backdrop-filter:blur(10px);border:1px solid rgba(251,248,241,.16);border-radius:18px;padding:22px 28px;width:fit-content;flex-wrap:wrap;animation:fadeUp .8s .58s both;">
@@ -93,18 +93,19 @@ export const landing = `
             </div>
             <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:#C1744E;margin:4px 0 22px;">{{ g.tagline }}</div>
             <sc-for list="{{ g.rows }}" as="r">
-              <div style="display:flex;align-items:baseline;gap:12px;padding:10px 8px;margin:0 -8px;border-radius:6px;transition:background .2s;" style-hover="background:#F4EEE3;">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 8px;margin:0 -8px;border-radius:6px;transition:background .2s;" style-hover="background:#F4EEE3;">
                 <div style="font-size:16.5px;font-weight:500;color:#2A332C;white-space:nowrap;flex-shrink:0;">{{ r.name }}</div>
                 <div style="flex:1;border-bottom:1.5px dotted #C9BFA8;"></div>
                 <div style="color:#C1744E;font-weight:600;">{{ r.priceStr }}</div>
+                <button onClick="{{ r.add }}" title="Add to cart" style="width:28px;height:28px;flex-shrink:0;border-radius:50%;border:none;background:#2E4A3C;color:#F4EEE3;font-size:16px;line-height:1;cursor:pointer;transition:background .2s,transform .2s;" style-hover="background:#C1744E;transform:scale(1.08);">+</button>
               </div>
             </sc-for>
           </div>
         </sc-for>
       </div>
       <div style="text-align:center;margin-top:48px;">
-        <button onClick="{{ goOrder }}" style="background:#2E4A3C;color:#F4EEE3;border:none;padding:16px 36px;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:999px;transition:background .2s,transform .2s;" style-hover="background:#C1744E;transform:translateY(-2px);">ORDER FROM YOUR TABLE →</button>
-        <div style="font-size:13px;color:#7A8378;margin-top:12px;">or scan the QR code on your table</div>
+        <button onClick="{{ openCart }}" style="background:#2E4A3C;color:#F4EEE3;border:none;padding:16px 36px;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:999px;transition:background .2s,transform .2s;" style-hover="background:#C1744E;transform:translateY(-2px);">REVIEW MY ORDER →</button>
+        <div style="font-size:13px;color:#7A8378;margin-top:12px;">tap + on any item to add it to your cart</div>
       </div>
     </div>
     <div id="about" class="sec-pad" style="background:radial-gradient(circle at 88% 15%, rgba(86,112,95,.13), transparent 42%),radial-gradient(circle at 6% 85%, rgba(193,116,78,.12), transparent 45%),#FBF8F1;padding:96px 64px;">

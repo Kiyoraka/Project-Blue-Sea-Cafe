@@ -74,15 +74,6 @@ export function renderVals(state, props, app) {
   const view = s.view, tab = s.tab;
   const radius = props.deliveryRadiusKm ?? s.radius;
   const sstRate = (props.sstPercent ?? 6) / 100;
-  const cats = ['All', 'Coffee', 'Cakes'].map((name) => ({
-    name,
-    bd: s.orderCat === name ? '#2E4A3C' : '#E3DCCB',
-    bg: s.orderCat === name ? '#2E4A3C' : '#FBF8F1',
-    fg: s.orderCat === name ? '#F4EEE3' : '#2A332C',
-    pick: () => app.setState({ orderCat: name }),
-  }));
-  const orderItems = s.items.filter((i) => s.orderCat === 'All' || i.cat === s.orderCat)
-    .map((i) => ({ ...deco(i), add: () => app.setState((st) => ({ cart: { ...st.cart, [i.id]: (st.cart[i.id] || 0) + 1 } })) }));
   const payNames = [s.duitnow && 'DuitNow QR', s.fpx && 'FPX Banking', s.cash && 'Pay at counter'].filter(Boolean);
   const payOptions = payNames.map((name) => ({
     name,
@@ -124,7 +115,10 @@ export function renderVals(state, props, app) {
       { title: 'CAKES & BAKES', tagline: 'baked before sunrise, gone by dusk' },
     ].map((g, gi) => ({
       ...g,
-      rows: s.items.filter((i) => (gi === 0 ? i.cat === 'Coffee' : i.cat !== 'Coffee')).map((i) => deco(i)),
+      rows: s.items.filter((i) => (gi === 0 ? i.cat === 'Coffee' : i.cat !== 'Coffee')).map((i) => ({
+        ...deco(i),
+        add: () => app.setState((st) => ({ cart: { ...st.cart, [i.id]: (st.cart[i.id] || 0) + 1 } })),
+      })),
     })),
     trackPhone: s.trackPhone,
     setTrackPhone: (e) => app.setState({ trackPhone: e.target.value }),
@@ -150,17 +144,24 @@ export function renderVals(state, props, app) {
       }));
     })(),
     goLandingA: (e) => { e.preventDefault(); app.setState({ view: 'landing' }); },
-    goOrder: () => app.setState({ view: 'order', orderPlaced: false }),
     goLogin: () => app.setState({ view: 'login' }),
-    featured: s.items.slice(0, 4).map((i) => deco(i)),
-    tableNo: s.tableNo, orderPlaced: s.orderPlaced, notPlaced: !s.orderPlaced,
-    lastOrderId: s.lastOrderId, lastOrderTotal: s.lastOrderTotal, payMethod: s.payMethod,
-    orderAgain: () => app.setState({ orderPlaced: false }),
-    cats, orderItems, payOptions, cartList: cartListArr,
-    hasCart: cartListArr.length > 0, cartTotalStr: rm(cartTotalVal),
+    goMenu: () => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' }),
+    // Inline cart (public site): right drawer on desktop, bottom sheet on mobile.
+    payMethod: s.payMethod, payOptions, cartList: cartListArr,
+    hasCart: cartListArr.length > 0, cartEmpty: cartListArr.length === 0,
+    cartTotalStr: rm(cartTotalVal),
+    cartCount: Object.values(s.cart).reduce((a, q) => a + q, 0),
+    cartOpen: s.cartOpen,
+    openCart: () => app.setState({ cartOpen: true }),
+    closeCart: () => app.setState({ cartOpen: false }),
+    // has-items drives the desktop drawer; open drives the mobile sheet (different @media).
+    cartPanelClass: (cartListArr.length ? 'has-items' : '') + (s.cartOpen ? ' open' : ''),
+    cartBarClass: (cartListArr.length && !s.cartOpen) ? 'show' : '',
     placeOrder: () => {
-      pushOrder(s, app, 'Table ' + s.tableNo, 'cart', { orderPlaced: true, lastOrderId: '#' + s.nextOrderNo, lastOrderTotal: rm(cartTotalVal) });
+      if (cartListArr.length === 0) return;
+      const no = pushOrder(s, app, 'Online', 'cart', { cartOpen: false });
       app.setState((st) => ({ salesToday: st.salesToday + cartTotalVal, txToday: st.txToday + 1 }));
+      showToast(app, 'Order sent · ' + no + ' · ' + rm(cartTotalVal));
     },
     loginId: s.loginId, loginPin: s.loginPin,
     setLoginId: (e) => app.setState({ loginId: e.target.value }),
