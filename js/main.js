@@ -10,6 +10,7 @@ import { login } from './views/login.js';
 import { pwchange } from './views/pwchange.js';
 import { appView } from './views/app/shell.js';
 import { customer } from './views/customer/shell.js';
+import { displays } from './views/display/shell.js';
 import { editModal, toast } from './views/modals.js';
 
 // Design props (data-props defaults from the source): deliveryRadiusKm=5, sstPercent=6.
@@ -23,6 +24,7 @@ const template = `
   ${pwchange}
   ${appView}
   ${customer}
+  ${displays}
   ${editModal}
   ${toast}
 </div>

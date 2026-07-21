@@ -38,15 +38,6 @@ export const settingTab = `
         <button onClick="{{ addStation }}" style="background:#2E4A3C;color:#F4EEE3;border:none;padding:9px 16px;cursor:pointer;font-size:13px;" style-hover="background:#C1744E;">Add</button>
       </div>
     </div>
-    <div style="background:rgba(251,248,241,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:14px;overflow:hidden;padding:22px;">
-      <div style="font-weight:500;margin-bottom:4px;">Staff</div>
-      <div style="font-size:13px;color:#7A8378;margin-bottom:14px;">POS login by staff ID</div>
-      <sc-for list="{{ staffRows }}" as="s">
-        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F0EADB;font-size:14px;">
-          <span>{{ s.name }}</span><span style="color:#7A8378;">{{ s.id }} · {{ s.role }}</span>
-        </div>
-      </sc-for>
-    </div>
   </div>
 </sc-if>
 `;

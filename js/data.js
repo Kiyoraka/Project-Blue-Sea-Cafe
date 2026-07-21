@@ -26,6 +26,7 @@ export const initialState = {
   custPhone: '', custTab: 'main',
   pwNew: '', pwConfirm: '',
   guestName: '', guestPhone: '',
+  opsOpen: true, peopleOpen: true, // staff sidebar dropdown groups (start expanded)
   orders: [
     { id: '#1040', src: 'Table 4', items: [[2, 2], [5, 1]], status: 'Preparing' },
     { id: '#1041', src: 'Delivery', items: [[1, 1], [7, 2]], status: 'New' },

@@ -104,6 +104,20 @@ export function renderVals(state, props, app) {
       go: () => app.setState({ tab: key }),
     }));
   const orderRows = s.orders.map((o, i) => orderRow(s, app, o, i));
+  // Sidebar nav model + Kitchen/Bar station displays.
+  const navItem = (key) => ({
+    bg: tab === key ? '#C1744E' : 'transparent',
+    fg: tab === key ? '#FBF8F1' : '#C9D6CC',
+    go: () => app.setState({ tab: key }),
+  });
+  const imap = itemsById(s);
+  const hasStation = (o, st) => o.items.some(([id]) => (imap[id] ? imap[id].station : '') === st);
+  const stationOrders = (st) => s.orders
+    .map((o, i) => [o, i])
+    .filter(([o]) => o.status !== 'Done' && hasStation(o, st))
+    .map(([o, i]) => orderRow(s, app, o, i));
+  const kitchenOrders = stationOrders('Kitchen');
+  const barOrders = stationOrders('Barista');
   const hours = [['9a', 40], ['10a', 65], ['11a', 80], ['12p', 100], ['1p', 92], ['2p', 60], ['3p', 55], ['4p', 70], ['5p', 48], ['6p', 38], ['7p', 30], ['8p', 22]];
   const maxH = 100;
   const hourBars = hours.map(([label, v]) => ({
@@ -124,15 +138,17 @@ export function renderVals(state, props, app) {
     ...deco(i),
     add: () => app.setState((st) => ({ cart: { ...st.cart, [i.id]: (st.cart[i.id] || 0) + 1 }, cartDismissed: false })),
   }));
-  const customerRows = s.customers.map((c) => {
+  const customerRows = s.customers.map((c, i) => {
     const co = s.orders.filter((o) => normPhone(o.phone) === normPhone(c.phone));
-    return { name: c.name, phone: c.phone, debtStr: rm(customerDebt(s, c.phone)), count: String(co.length), last: co[0] ? co[0].id : '—' };
+    return { no: String(i + 1), name: c.name, phone: c.phone, debtStr: rm(customerDebt(s, c.phone)), count: String(co.length), last: co[0] ? co[0].id : '—' };
   });
   return {
     isLanding: view === 'landing', isOrder: view === 'order', isLogin: view === 'login', isApp: view === 'app',
     isCustomer: view === 'customer', isPwchange: view === 'pwchange',
+    isKitchen: view === 'kitchen', isBar: view === 'bar',
     tabMain: tab === 'main', tabAnalysis: tab === 'analysis', tabProduct: tab === 'product',
     tabOrder: tab === 'order', tabPos: tab === 'pos', tabCustomer: tab === 'customer', tabSetting: tab === 'setting',
+    tabDashboard: tab === 'dashboard', tabStaff: tab === 'staff',
     goLanding: () => app.setState({ view: 'landing', custPhone: '', custTab: 'main' }),
     goLoginA: (e) => { e.preventDefault(); app.setState({ view: 'login' }); },
     menuGroups: [
@@ -311,7 +327,22 @@ export function renderVals(state, props, app) {
       { name: 'Aiman (you)', id: 'BS-001', role: 'Manager' },
       { name: 'Siti', id: 'BS-002', role: 'Cashier' },
       { name: 'Hafiz', id: 'BS-003', role: 'Barista' },
-    ],
+    ].map((r, i) => ({ ...r, no: String(i + 1) })),
+
+    // ---- Sidebar dropdown groups + Kitchen/Bar displays ----------------------
+    navMain: navItem('main'), navAnalysis: navItem('analysis'), navSetting: navItem('setting'),
+    navProduct: navItem('product'), navOrder: navItem('order'), navPos: navItem('pos'), navDashboard: navItem('dashboard'),
+    navCustomer: navItem('customer'), navStaff: navItem('staff'),
+    orderBadge: navBadges.order,
+    opsOpen: s.opsOpen, peopleOpen: s.peopleOpen,
+    toggleOps: () => app.setState((st) => ({ opsOpen: !st.opsOpen })),
+    togglePeople: () => app.setState((st) => ({ peopleOpen: !st.peopleOpen })),
+    opsChevron: s.opsOpen ? '▾' : '▸', peopleChevron: s.peopleOpen ? '▾' : '▸',
+    openKitchen: () => app.setState({ view: 'kitchen' }),
+    openBar: () => app.setState({ view: 'bar' }),
+    backToApp: () => app.setState({ view: 'app', tab: 'dashboard' }),
+    kitchenOrders, barOrders,
+    kitchenEmpty: kitchenOrders.length === 0, barEmpty: barOrders.length === 0,
 
     // ---- Customer account + dashboard ----------------------------------------
     custName: cust ? cust.name : '', custPhoneStr: s.custPhone,

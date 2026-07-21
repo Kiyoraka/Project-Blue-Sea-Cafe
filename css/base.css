@@ -104,3 +104,14 @@ input, select, button { font-family: 'Jost', sans-serif; }
 .cnav-item.active { color: #C1744E; }
 .cnav-item:hover { color: #2E4A3C; }
 .cnav-ico { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- Station displays (Kitchen / Bar KDS) --------------------------------- */
+.kds-wrap { min-height: 100vh; display: flex; flex-direction: column; background: #2E4A3C; }
+.kds-head {
+  background: #24382E; color: #F4EEE3; padding: 18px 28px;
+  display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #3D5A4B;
+}
+.kds-body { flex: 1; padding: 28px; overflow: auto; }
+.kds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.kds-card { background: rgba(251, 248, 241, .95); border-radius: 16px; padding: 20px; box-shadow: 0 12px 30px rgba(0, 0, 0, .2); }
+.kds-empty { color: #9DB3A6; font-size: 15px; text-align: center; padding: 60px 0; }
