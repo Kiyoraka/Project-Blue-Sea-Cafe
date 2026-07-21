@@ -34,7 +34,7 @@
     border-radius: 0; box-shadow: none;
     transform: translateX(100%);
   }
-  .cart-panel.has-items { transform: translateX(100%); }  /* items alone don't open */
+  /* Mobile opens only via the Cart tab (open); adding items never auto-opens it. */
   .cart-panel.open { transform: translateX(0); }          /* Cart tab opens the page */
   .cart-backdrop, .cart-backdrop.open { display: none; }
 }

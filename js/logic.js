@@ -117,7 +117,7 @@ export function renderVals(state, props, app) {
       ...g,
       rows: s.items.filter((i) => (gi === 0 ? i.cat === 'Coffee' : i.cat !== 'Coffee')).map((i) => ({
         ...deco(i),
-        add: () => app.setState((st) => ({ cart: { ...st.cart, [i.id]: (st.cart[i.id] || 0) + 1 } })),
+        add: () => app.setState((st) => ({ cart: { ...st.cart, [i.id]: (st.cart[i.id] || 0) + 1 }, cartDismissed: false })),
       })),
     })),
     trackPhone: s.trackPhone,
@@ -152,11 +152,13 @@ export function renderVals(state, props, app) {
     cartTotalStr: rm(cartTotalVal),
     cartCount: Object.values(s.cart).reduce((a, q) => a + q, 0),
     cartOpen: s.cartOpen,
-    openCart: () => app.setState({ cartOpen: true }),
-    closeCart: () => app.setState({ cartOpen: false }),
-    // has-items opens the desktop drawer; open opens it explicitly (Cart tab) and is
-    // the mobile full-page trigger (different @media handle each).
-    cartPanelClass: (cartListArr.length ? 'has-items' : '') + (s.cartOpen ? ' open' : ''),
+    openCart: () => app.setState({ cartOpen: true, cartDismissed: false }),
+    closeCart: () => app.setState({ cartOpen: false, cartDismissed: true }),
+    // d-open drives the desktop drawer (auto-shows when the cart has items unless the
+    // user dismissed it with x; the Cart tab forces it open). open drives the mobile
+    // full-page view (Cart tab only). Different @media handle each; x closes both.
+    cartPanelClass: (((cartListArr.length && !s.cartDismissed) || s.cartOpen) ? 'd-open' : '')
+      + (s.cartOpen ? ' open' : ''),
     cartBadgeClass: cartListArr.length ? 'show' : '',
     placeOrder: () => {
       if (cartListArr.length === 0) return;
