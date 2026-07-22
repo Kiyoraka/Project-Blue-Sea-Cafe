@@ -26,8 +26,6 @@
   .sec-head { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
   .stat-row { gap: 22px !important; }
 
-  .nav-cta { display: none !important; }  /* slim the top bar to logo + STAFF */
-
   /* Cart = full-page view: slides in from the right, no sheet, no backdrop. */
   .cart-panel {
     inset: 0; width: 100%; max-width: 100%; height: 100%; max-height: none;

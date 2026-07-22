@@ -19,7 +19,6 @@ export const landing = `
         <a href="#track" style="color:#2E4A3C;padding-bottom:2px;border-bottom:1.5px solid transparent;" style-hover="color:#C1744E;border-bottom-color:#C1744E;">TRACK ORDER</a>
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
-        <button onClick="{{ goMenu }}" class="nav-cta" style="background:#C1744E;border:none;color:#FBF8F1;padding:11px 24px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;transition:transform .2s,background .2s;" style-hover="background:#A85F3D;transform:translateY(-1px);">ORDER ONLINE</button>
         <button onClick="{{ goLogin }}" style="background:transparent;border:1px solid #CBBFA6;color:#2E4A3C;padding:10px 18px;letter-spacing:1.5px;cursor:pointer;font-size:13px;border-radius:999px;" style-hover="border-color:#2E4A3C;">LOGIN</button>
       </div>
     </div>
