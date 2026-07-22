@@ -26,9 +26,9 @@
   .sec-head { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
   .stat-row { gap: 22px !important; }
 
-  /* Settings tab: 3-col cards + Account email/password row collapse to one column. */
+  /* Settings tab: 4-col cards collapse to one column; drop the desktop min-height so stacked cards hug content. */
   .set-grid { grid-template-columns: 1fr !important; }
-  .set-account-grid { grid-template-columns: 1fr !important; }
+  .set-card { min-height: 0 !important; }
 
   /* Cart = full-page view: slides in from the right, no sheet, no backdrop. */
   .cart-panel {
