@@ -115,3 +115,6 @@ input, select, button { font-family: 'Jost', sans-serif; }
 .kds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
 .kds-card { background: rgba(251, 248, 241, .95); border-radius: 16px; padding: 20px; box-shadow: 0 12px 30px rgba(0, 0, 0, .2); }
 .kds-empty { color: #9DB3A6; font-size: 15px; text-align: center; padding: 60px 0; }
+
+/* ---- Settings cards (4-column row, comfortable fixed height) --------------- */
+.set-card { min-height: 400px; }
