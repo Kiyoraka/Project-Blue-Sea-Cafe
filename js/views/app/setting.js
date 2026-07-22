@@ -3,7 +3,7 @@
 export const settingTab = `
 <sc-if value="{{ tabSetting }}">
   <div style="font-family:'Marcellus',serif;font-size:28px;color:#2E4A3C;margin-bottom:20px;">Settings</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:920px;">
+  <div class="set-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:1500px;">
     <div style="background:rgba(251,248,241,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:14px;overflow:hidden;padding:22px;">
       <div style="font-weight:500;margin-bottom:4px;">Payment gateway</div>
       <div style="font-size:13px;color:#7A8378;margin-bottom:14px;">Used for QR table &amp; delivery orders</div>
@@ -36,6 +36,27 @@ export const settingTab = `
       <div style="display:flex;gap:8px;margin-top:12px;">
         <input value="{{ newStation }}" onChange="{{ setNewStation }}" placeholder="e.g. Dessert Station" style="flex:1;padding:9px 10px;border:1px solid #E3DCCB;background:#F4EEE3;font-size:13.5px;outline:none;">
         <button onClick="{{ addStation }}" style="background:#2E4A3C;color:#F4EEE3;border:none;padding:9px 16px;cursor:pointer;font-size:13px;" style-hover="background:#C1744E;">Add</button>
+      </div>
+    </div>
+    <div class="set-account" style="grid-column:1/-1;background:rgba(251,248,241,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:14px;overflow:hidden;padding:22px;">
+      <div style="font-weight:500;margin-bottom:4px;">Account &amp; Security</div>
+      <div style="font-size:13px;color:#7A8378;margin-bottom:16px;">Your signed-in email and password</div>
+      <div class="set-account-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+        <div>
+          <div style="font-size:12.5px;letter-spacing:1px;color:#7A8378;margin-bottom:6px;">LOGIN EMAIL</div>
+          <div style="display:flex;gap:8px;">
+            <input value="{{ staffEmailDraft }}" onChange="{{ setStaffEmail }}" placeholder="you@cafe.com" style="flex:1;min-width:0;padding:10px;border:1px solid #E3DCCB;background:#F4EEE3;font-size:14px;outline:none;">
+            <button onClick="{{ saveStaffEmail }}" style="background:#2E4A3C;color:#F4EEE3;border:none;padding:9px 16px;cursor:pointer;font-size:13px;white-space:nowrap;" style-hover="background:#C1744E;">Update email</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12.5px;letter-spacing:1px;color:#7A8378;margin-bottom:6px;">CHANGE PASSWORD</div>
+          <div style="display:flex;gap:8px;">
+            <input value="{{ staffPwNew }}" onChange="{{ setStaffPwNew }}" type="{{ pwType }}" placeholder="New password" style="flex:1;min-width:0;padding:10px;border:1px solid #E3DCCB;background:#F4EEE3;font-size:14px;outline:none;">
+            <input value="{{ staffPwConfirm }}" onChange="{{ setStaffPwConfirm }}" type="{{ pwType }}" placeholder="Confirm" style="flex:1;min-width:0;padding:10px;border:1px solid #E3DCCB;background:#F4EEE3;font-size:14px;outline:none;">
+            <button onClick="{{ saveStaffPw }}" style="background:#2E4A3C;color:#F4EEE3;border:none;padding:9px 16px;cursor:pointer;font-size:13px;white-space:nowrap;" style-hover="background:#C1744E;">Update password</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
