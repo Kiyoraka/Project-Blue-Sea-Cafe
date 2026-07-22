@@ -226,7 +226,7 @@ export function renderVals(state, props, app) {
       if (!id) { showToast(app, 'Enter your phone or email'); return; }
       // Staff sign in with an email; customers use only a phone number.
       if (id.includes('@')) {
-        app.setState({ view: 'app', staffId: id, tab: 'main', loginPin: '' });
+        app.setState({ view: 'app', staffId: id, staffEmailDraft: id, tab: 'main', loginPin: '' });
         showToast(app, 'Welcome back');
         return;
       }
@@ -401,6 +401,27 @@ export function renderVals(state, props, app) {
         pwNew: '', pwConfirm: '',
         ...(fromGate ? { view: 'customer', custTab: 'main' } : {}),
       }));
+      showToast(app, 'Password updated');
+    },
+
+    // staff account & security (Setting tab) — email is the login identity (staffId),
+    // password is hardcode-first, mirroring the customer savePw flow above
+    staffEmailDraft: s.staffEmailDraft,
+    setStaffEmail: (e) => app.setState({ staffEmailDraft: e.target.value }),
+    saveStaffEmail: () => {
+      const email = s.staffEmailDraft.trim();
+      if (!email) { showToast(app, 'Enter an email'); return; }
+      if (!email.includes('@')) { showToast(app, 'Enter a valid email'); return; }
+      app.setState({ staffId: email, staffEmailDraft: email });
+      showToast(app, 'Email updated');
+    },
+    staffPwNew: s.staffPwNew, staffPwConfirm: s.staffPwConfirm,
+    setStaffPwNew: (e) => app.setState({ staffPwNew: e.target.value }),
+    setStaffPwConfirm: (e) => app.setState({ staffPwConfirm: e.target.value }),
+    saveStaffPw: () => {
+      if (!s.staffPwNew.trim()) { showToast(app, 'Enter a new password'); return; }
+      if (s.staffPwNew !== s.staffPwConfirm) { showToast(app, 'Passwords do not match'); return; }
+      app.setState({ staffPassword: s.staffPwNew, staffPwNew: '', staffPwConfirm: '' });
       showToast(app, 'Password updated');
     },
 
