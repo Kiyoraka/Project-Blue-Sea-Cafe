@@ -17,6 +17,9 @@ export const initialState = {
   nextItemId: 9, nextOrderNo: 1043,
   cart: {}, cartOpen: false, cartDismissed: false, payMethod: 'DuitNow QR',
   loginId: '', loginPin: '', pwVisible: false, staffId: 'BS-001',
+  // Staff account & security (Setting tab). Email = login identity (staffId); password
+  // is hardcode-first (no gate yet), mirroring the customer change-password flow.
+  staffEmailDraft: 'BS-001', staffPassword: '', staffPwNew: '', staffPwConfirm: '',
   // Customer accounts (phone-only). Initial password = name + phone; must change on
   // first login. Debt is derived from the matching VIP tab balance at render time.
   customers: [
