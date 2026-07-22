@@ -26,6 +26,10 @@
   .sec-head { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
   .stat-row { gap: 22px !important; }
 
+  /* Settings tab: 3-col cards + Account email/password row collapse to one column. */
+  .set-grid { grid-template-columns: 1fr !important; }
+  .set-account-grid { grid-template-columns: 1fr !important; }
+
   /* Cart = full-page view: slides in from the right, no sheet, no backdrop. */
   .cart-panel {
     inset: 0; width: 100%; max-width: 100%; height: 100%; max-height: none;
