@@ -20,11 +20,12 @@ export const initialState = {
   // Staff account & security (Setting tab). Email = login identity (staffId); password
   // is hardcode-first (no gate yet), mirroring the customer change-password flow.
   staffEmailDraft: 'BS-001', staffPassword: '', staffPwNew: '', staffPwConfirm: '',
-  // Customer accounts (phone-only). Initial password = name + phone; must change on
-  // first login. Debt is derived from the matching VIP tab balance at render time.
+  // Customer accounts (phone-only). Seed demo accounts use a simple password so they log
+  // straight in; new customers created at checkout still get password = name + phone with
+  // mustChange:true (forced-change flow). Debt derives from the matching VIP tab balance.
   customers: [
-    { phone: '012-3456789', name: 'Dato Rahman', password: 'Dato Rahman012-3456789', mustChange: true },
-    { phone: '019-8877665', name: 'Ms. Lily Tan', password: 'Ms. Lily Tan019-8877665', mustChange: true },
+    { phone: '012-3456789', name: 'Dato Rahman', password: 'admin123', mustChange: false },
+    { phone: '019-8877665', name: 'Ms. Lily Tan', password: 'admin123', mustChange: false },
   ],
   custPhone: '', custTab: 'main',
   pwNew: '', pwConfirm: '',
