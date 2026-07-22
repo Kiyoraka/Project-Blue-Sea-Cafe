@@ -26,9 +26,8 @@
   .sec-head { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
   .stat-row { gap: 22px !important; }
 
-  /* Settings tab: 4-col cards collapse to one column; drop the desktop min-height so stacked cards hug content. */
-  .set-grid { grid-template-columns: 1fr !important; }
-  .set-card { min-height: 0 !important; }
+  /* Settings tab: each section stacks its label above its controls. */
+  .set-row { grid-template-columns: 1fr !important; gap: 14px !important; }
 
   /* Cart = full-page view: slides in from the right, no sheet, no backdrop. */
   .cart-panel {
